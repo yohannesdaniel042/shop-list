@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="shop-container">
+  <h1>MY SHOP LIST</h1>
+<form action="/add-item" method="POST">
+    <label for="item">Item:</label>
+    <input type="text" name="item" placeholder="Add a new item" required />
+    <button type="submit">Add</button>
+  </form>
+  <ul>
+  <% items.forEach((item) => { %>
+<li>
+  <form action="/complete-item" method="POST">
+    <input
+      type="checkbox"
+      name="completed"
+      value="<%= item.id %>"
+      <%= item.completed ? "checked" : "" %>
+    >
+
+    <span class="item-name"><%= item.itemname %></span>
+
+    <button type="submit">Save</button>
+  </form>
+
+  <a href="/edit/<%= item.id %>">Edit</a>
+
+  <form action="/delete-item" method="POST" style="display: inline;">
+    <input type="hidden" name="id" value="<%= item.id %>">
+    <button type="submit">Delete</button>
+  </form>
+</li>
+  <% }) %>
+</ul>
+<form action="/logout" method="POST">
+  <button type="submit">Logout</button>
+</form>
+</div>
+</body>
+</html>
