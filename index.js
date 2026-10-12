@@ -18,18 +18,28 @@ app.use(
     saveUninitialized: false,
   })
 );
+const { Pool } = require('pg'); 
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
-const db = new pg.Client({
-  host: "localhost",
-  port: 5432,
-  database: "shop-list",
-  user: "postgres",
-  password: process.env.DB_PASSWORD,
-});
+const db = new pg.Pool(
+  process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      }
+    : {
+        host: "localhost",
+        port: 5432,
+        database: "shop-list",
+        user: "postgres",
+        password: process.env.DB_PASSWORD,
+      }
+);
 
-db.connect()
+db.query("SELECT 1")
   .then(() => console.log("DATABASE CONNECTED"))
   .catch((err) => console.log(err));
+
 
 app.get("/", (req, res) => {
   res.render("index.ejs");
