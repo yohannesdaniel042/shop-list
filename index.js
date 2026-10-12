@@ -39,6 +39,29 @@ const db = new pg.Pool(
 db.query("SELECT 1")
   .then(() => console.log("DATABASE CONNECTED"))
   .catch((err) => console.log(err));
+ 
+  async function setupTables() {
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS items (
+      id SERIAL PRIMARY KEY,
+      itemname TEXT NOT NULL,
+      completed BOOLEAN DEFAULT false,
+      user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+    );
+  `);
+  console.log("TABLES READY");
+}
+
+setupTables().catch((err) => console.log(err));
+
+
 
 
 app.get("/", (req, res) => {
