@@ -18,8 +18,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-const { Pool } = require('pg'); 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
 const db = new pg.Pool(
   process.env.DATABASE_URL
